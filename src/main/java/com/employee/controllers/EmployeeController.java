@@ -2,6 +2,7 @@ package com.employee.controllers;
 
 import com.employee.entities.Employee;
 import com.employee.services.EmployeeService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,19 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees(){
-        return new ResponseEntity<List<Employee>>(employeeService.getEmployees(), HttpStatus.OK);
+    public ResponseEntity<Page<Employee>> getEmployees(@RequestParam("pageNumber") int pageNumber,
+                                                       @RequestParam("pageSize") int pageSize){
+        return new ResponseEntity<Page<Employee>>(employeeService.getEmployees(pageNumber,pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
         return new ResponseEntity<Employee>(employeeService.getEmployee(id), HttpStatus.OK);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id){
+
+        return new ResponseEntity<String>(employeeService.deleteEmployee(id),HttpStatus.OK);
     }
 
 }

@@ -4,6 +4,9 @@ import com.employee.entities.Employee;
 import com.employee.repositories.EmployeeRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,13 +42,19 @@ public class EmployeeService {
 
     }
 
-    public List<Employee> getEmployees() {
-        return employeeRepo.findAll();
+    public Page<Employee> getEmployees(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return employeeRepo.findAll(pageable);
     }
 
     public Employee getEmployee(Long id) {
         Optional<Employee> optional = employeeRepo.findById(id);
 
         return optional.get();
+    }
+
+    public String deleteEmployee(Long id) {
+        employeeRepo.deleteById(id);
+        return "Employee Deleted";
     }
 }
